@@ -279,7 +279,7 @@
          $('#autor-post').text('por ' + autor + " " + apellido);
          $('#titulo-post').text(titulo);
          $('#text-post').text(texto);
-         $('#fech').append(fecha);
+         $('#fech').html(fecha);
          console.log('nombre: '+nombre);
         $('#img-show').attr({src: '{{ URL::to('/') }}/images/'+nombre});
          $({blurRadius: 0}).animate({blurRadius: 4}, {

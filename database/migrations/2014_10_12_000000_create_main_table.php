@@ -57,7 +57,7 @@ class CreateMainTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('text');
+            $table->longText('text');
             $table->string('img_src');
             $table->string('fecha');
             $table->unsignedInteger('user_id')->nullable();

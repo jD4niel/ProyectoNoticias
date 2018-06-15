@@ -22,13 +22,13 @@
                     </div>
                     <div class="plano-body">
                       <div class="gallery contenedor">
-                        <img id="myImg" class="myImg{{$item->id}}"  data-apellido="{{$item->last_name}}" data-titulo='{{$item->title}}' data-fecha="{{$item->fecha}}" data-autor="{{$item->name}}" data-text="{{$item->text}}" data-nombre="{{$item->img_src}}" src="{{ URL::to('/') }}/images/{{$item->img_src}}" class="img-thumbnail crop" width="280" alt=""><br>
+                        <img id="myImg" data-apellido="{{$item->last_name}}" data-titulo='{{$item->title}}' data-fecha="{{$item->fecha}}" data-autor="{{$item->name}}" data-text="{{$item->text}}" data-nombre="{{$item->img_src}}"  class="img-thumbnail crop myImg{{$item->id}}" width="280" alt="" src='{{ URL::to('/') }}/images/{{$item->img_src}}'><br>
                       </div>
                       <strong>  Autor: </strong><span data-iduser="{{$item->user_id}}" class="autor_">{{$item->name}}&nbsp;{{$item->last_name}}</span><br>
                       <strong>  Fecha: </strong><span class="fecha_">{{$item->fecha}}</span><br>
                     </div>
                     <div class="texto_" data-text="{{$item->text}}" style="margin-top:6px;">
-                      {{substr($item->text,0,80) }}... <a id="continuar" href="#" data-id="{{$item->id}}">continuar leyendo</a>
+                      {{substr($item->text,0,50) }}... <a id="continuar" href="#" data-id="{{$item->id}}">continuar leyendo</a>
                     </div>
                     <hr>
                     <div class="botones auto-margin">
@@ -116,8 +116,8 @@
              <h2 id="autor-post"></h2>
              <div id="text-post"></div>
              <hr>
+             <strong>Fecha:</strong>
              <div id="fech">
-               <strong>Fecha:</strong>
              </div>
            </div>
        </div>
