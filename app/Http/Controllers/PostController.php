@@ -3,7 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Dompdf\Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Intervention\Image\ImageManagerStatic as Image;
+use App\Http\Controllers\Controller;
+use Illuminate\Pagination\Paginator;
+use FontLib\Table\Type\name;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 
 class PostController extends Controller
 {
@@ -14,7 +27,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+      $post = DB::table('users')->join('posts','users.id','=','posts.user_id')->paginate(6);
+      $user = User::get();
+      //dd($post);
+      return view('index',compact('post','user'));
     }
 
     /**
@@ -22,64 +38,74 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function crear()
     {
-        //
+        $user = User::get();
+        return view('create',compact('user'));
+    }
+    public function create(Request $request)
+    {
+      DB::beginTransaction();
+
+        try {
+          $data = Post::create($request->all());
+        } catch (ValidationException $e) {
+            DB::rollback();
+        }
+        DB::commit();
+
+        return $data;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request)
     {
-        //
+        $data=Post::find($request->id);
+        $data->title = $request->title;
+        $data->text= $request->text;
+        $data->img_src =  $request->img_src;
+        $data->user_id = $request->user_id;
+        $data->fecha = $request->fecha;
+        $data->save();
+        return $data;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
+    public function destroy(Request $request)
     {
-        //
+      $data=Post::destroy($request->id);
+      return $request;
     }
+    public function upload(Request $request){
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
+        DB::beginTransaction();
+        try{
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
-    }
+            $data = $request->all();
+            foreach ($data["file"] as $file) {
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Post $post)
-    {
-        //
+                $attr = exif_read_data($file);
+                $filename_img = $file->getClientOriginalName();
+                $mime = $file->getMimeType();
+
+                if (($mime == 'image/jpeg') || ($mime == 'image/jpg' ) || ($mime == 'image/png')) {
+
+                    $destinationPath = public_path() . '/images';
+                    $filename_img = $file->getClientOriginalName();
+                    if (!File::exists($destinationPath)) {
+                        File::makeDirectory($destinationPath, 0755, true);
+                    }
+                    $destinationPath1 = $destinationPath . '/' . $filename_img;
+
+                    copy($file, $destinationPath1);
+                } else {
+                    return "Tipo de archivo invalido mime: " . $mime;
+                    abort(500);
+                }
+            }
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $e;
+        }
+        DB::commit();
     }
 }

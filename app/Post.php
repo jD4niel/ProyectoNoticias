@@ -10,10 +10,12 @@ class Post extends Model
         'title',
         'text',
         'img_src',
+        'fecha',
         'user_id',
         'address_id',
         'category_id'
     ];
+    public $timestamps = false;
     public function user()
     {
         return $this->belongsTo('App\User');

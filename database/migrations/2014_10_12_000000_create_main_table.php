@@ -59,10 +59,10 @@ class CreateMainTable extends Migration
             $table->string('title');
             $table->string('text');
             $table->string('img_src');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('address_id');
-            $table->unsignedInteger('category_id');
-            $table->timestamps();
+            $table->string('fecha');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('address_id')->nullable();
+            $table->unsignedInteger('category_id')->nullable();
 
             $table->foreign('user_id')
                 ->references('id')
