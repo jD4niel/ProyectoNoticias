@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::get('/index','PostController@index')->name('index.post');
+Route::post('/delete','PostController@destroy')->name('delete.post');
+Route::post('/update','PostController@update')->name('update.post');
+Route::get('/create','PostController@crear')->name('create.post');
+Route::post('/create','PostController@create')->name('create.new.post');
+Route::post('/upImg','PostController@upload')->name('imagenes.up');

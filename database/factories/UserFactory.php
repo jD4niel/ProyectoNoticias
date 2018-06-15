@@ -15,12 +15,12 @@ use Faker\Generator as Faker;
 
 $factory->define(App\User::class, function (Faker $faker) {
     return [
-        'name'=> $faker->userName,
+        'name'=> $faker->firstName,
         'email'=> $faker->unique()->safeEmail,
         'password'=> $faker->password,
         'last_name'=> $faker->lastName,
         'second_last_name'=> $faker->lastName,
         'phone_number'=> $faker->phoneNumber,
-        'role_id'=> $faker->numberBetween(1,5)
+        'role_id'=> 2
     ];
 });
