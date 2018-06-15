@@ -12,7 +12,7 @@
 */
 
 
-
+Route::get('/',function () {return redirect('/index');});
 Route::get('/index','PostController@index')->name('index.post');
 Route::post('/delete','PostController@destroy')->name('delete.post');
 Route::post('/update','PostController@update')->name('update.post');
